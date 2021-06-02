@@ -1,0 +1,4 @@
+/InterWMSApp/bin/*
+/InterWMSApp/obj/*
+/InterWMSApp/.vs/*
+.vs/*

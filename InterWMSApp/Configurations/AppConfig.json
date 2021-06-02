@@ -1,0 +1,6 @@
+{
+  "AppSettings": {
+    "PgConnection": "Host=localhost;PORT=5432;Username=postgres;Password=niyaz;Database=wmsdb;Integrated Security=true;Pooling=true;",
+    "TokenValidityTime":24
+  }
+}
