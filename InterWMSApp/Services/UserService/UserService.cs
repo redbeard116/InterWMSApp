@@ -74,8 +74,6 @@ namespace InterWMSApp.Services.UserService
 
                     result.FirstName = user.FirstName;
                     result.SecondName = user.SecondName;
-                    result.Login = user.Login;
-                    result.Password = user.Password;
                     await _dBContext.SaveChangesAsync();
                     return result;
                 }

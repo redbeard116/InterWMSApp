@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace InterWMSApp.Models
+namespace InterWMSApp.Models.Result
 {
     public class UserResult
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string Login { get; set; }

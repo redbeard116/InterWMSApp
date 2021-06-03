@@ -77,7 +77,7 @@ namespace InterWMSApp.Controllers
 
         private async Task<ClaimsIdentity> GetIdentity(UserAuth user)
         {
-            var userResult = await _authService.GetUser(user);
+            var userResult = await _authService.GetUserAuth(user);
             if (userResult != null)
             {
                 var claims = new List<Claim>

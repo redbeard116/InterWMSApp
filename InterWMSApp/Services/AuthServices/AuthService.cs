@@ -25,12 +25,19 @@ namespace InterWMSApp.Services.AuthServices
         #endregion
 
         #region IAuthService
-        public async Task<User> GetUser(UserAuth user)
+        public async Task<User> GetUserAuth(UserAuth user)
         {
             try
             {
                 _logger.LogInformation($"Auth in server");
-                var result = await _dBContext.Users.FirstOrDefaultAsync(w => w.Login == user.Login && w.Password == user.Password);
+                var auth = await _dBContext.Auths.FirstOrDefaultAsync(w => w.Login == user.Login && w.Password == user.Password);
+
+                if (auth == null)
+                {
+                    return null;
+                }
+
+                var result = await _dBContext.Users.FirstOrDefaultAsync(w => w.Id == auth.UserId);
 
                 if (result == null)
                     return null;

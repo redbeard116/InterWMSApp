@@ -1,4 +1,5 @@
 ﻿using InterWMSApp.Models.Abstract;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InterWMSApp.Models
@@ -6,22 +7,20 @@ namespace InterWMSApp.Models
     [Table("users", Schema = "public")]
     public class User : BaseModel
     {
-        [Column("firstname")]
+        [Column("firstname"), Required]
         public string FirstName { get; set; }
-        [Column("secondname")]
+
+        [Column("secondname"), Required]
         public string SecondName { get; set; }
-        [Column("login")]
-        public string Login { get; set; }
-        [Column("password")]
-        public string Password { get; set; }
-        [Column("role")]
+
+        [Column("role"), Required]
         public UserRole Role { get; set; }
     }
 
     public enum UserRole
     {
         Admin,
-        User,
+        Сounterparty,
         Manager
     }
 }

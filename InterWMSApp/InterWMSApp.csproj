@@ -25,9 +25,5 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Result\" />
-  </ItemGroup>
-
 
 </Project>

@@ -5,6 +5,6 @@ namespace InterWMSApp.Services.AuthServices
 {
     public interface IAuthService
     {
-        Task<User> GetUser(UserAuth user);
+        Task<User> GetUserAuth(UserAuth user);
     }
 }
