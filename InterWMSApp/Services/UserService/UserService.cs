@@ -48,7 +48,6 @@ namespace InterWMSApp.Services.UserService
             {
                 _logger.LogInformation($"DeleteUser {id}");
                 var user = _dBContext.Users.FirstOrDefault(w => w.Id == id);
-                _dBContext.Users.Remove(user);
                 await _dBContext.SaveChangesAsync();
                 return true;
             }

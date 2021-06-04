@@ -7,10 +7,14 @@ namespace InterWMSApp.Models
     [Table("productstorage", Schema = "public")]
     public class ProductStorage : BaseModel
     {
+
         [Column("productid"), Required]
         public int ProductId { get; set; }
 
+        public Product Product { get; set; }
+
         [Column("storageareaid"), Required]
         public int StorageAreaId { get; set; }
+        public StorageArea StorageArea { get; set; }
     }
 }

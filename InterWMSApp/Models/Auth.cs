@@ -10,6 +10,8 @@ namespace InterWMSApp.Models
         [Column("userid"), Required]
         public int UserId { get; set; }
 
+        public User User { get; set; }
+
         [Column("login"), Required]
         public string Login { get; set; }
 

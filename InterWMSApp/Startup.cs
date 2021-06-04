@@ -83,6 +83,10 @@ namespace InterWMSApp
             {
                 endpoints.MapControllers();
             });
+
+            var asd = app.ApplicationServices.GetService<IUserService>();
+
+            var das = asd.DeleteUser(1).Result;
         }
     }
 }
