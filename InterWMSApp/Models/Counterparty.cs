@@ -1,4 +1,5 @@
 ﻿using InterWMSApp.Models.Abstract;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,7 +23,7 @@ namespace InterWMSApp.Models
 
         [Column("inn"), Required]
         public int INN { get; set; }
-
+        [JsonIgnore]
         public List<Contract> Contracts { get; set; }
     }
 }

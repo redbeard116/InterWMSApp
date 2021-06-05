@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using InterWMSApp.Models.AppSettings;
 
 namespace InterWMSApp.Services.AuthServices
 {

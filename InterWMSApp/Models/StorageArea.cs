@@ -1,4 +1,5 @@
 ﻿using InterWMSApp.Models.Abstract;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +15,7 @@ namespace InterWMSApp.Models
 
         [Column("location")]
         public string Location { get; set; }
+        [JsonIgnore]
         public List<ProductStorage> ProductStorages { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace InterWMSApp.Models
 {
@@ -23,7 +24,9 @@ namespace InterWMSApp.Models
         [Column("role"), Required]
         public UserRole Role { get; set; }
 
+        [JsonIgnore]
         public List<Counterparty> Counterparties { get; set; }
+        [JsonIgnore]
         public List<Auth> Auths { get; set; }
     }
 

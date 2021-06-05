@@ -1,6 +1,7 @@
 using InterWMSApp.Models.AppSettings;
 using InterWMSApp.Services.AuthServices;
 using InterWMSApp.Services.DB;
+using InterWMSApp.Services.DictionaryService;
 using InterWMSApp.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -59,6 +60,7 @@ namespace InterWMSApp
             services.AddDbContext<DBContext>(ServiceLifetime.Transient);
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IDictionaryService, DictionaryService>();
             services.AddSingleton(_appSettings);
             services.AddSignalR();
             services.AddControllers();

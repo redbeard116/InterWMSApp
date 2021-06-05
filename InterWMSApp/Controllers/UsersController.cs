@@ -19,7 +19,6 @@ namespace InterWMSApp.Controllers
         private readonly IUserService _userService;
         #endregion
 
-
         #region Constructor
         public UsersController(ILogger<UsersController> logger,
                               IUserService userService)
