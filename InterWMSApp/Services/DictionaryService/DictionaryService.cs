@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace InterWMSApp.Services.DictionaryService
 {
@@ -15,7 +16,6 @@ namespace InterWMSApp.Services.DictionaryService
         private readonly ILogger<DictionaryService> _logger;
         private readonly DBContext _dBContext;
         #endregion
-
 
         #region Constructor
         public DictionaryService(ILogger<DictionaryService> logger,
@@ -60,7 +60,7 @@ namespace InterWMSApp.Services.DictionaryService
             try
             {
                 _logger.LogInformation($"Delete access type {id}");
-                var accessType = _dBContext.AccessTypes.FirstOrDefault(w => w.Id == id);
+                var accessType = await _dBContext.AccessTypes.FirstOrDefaultAsync(w => w.Id == id);
 
                 if (accessType == null)
                 {
@@ -113,7 +113,7 @@ namespace InterWMSApp.Services.DictionaryService
             try
             {
                 _logger.LogInformation($"Delete product type {id}");
-                var productType = _dBContext.ProductTypes.FirstOrDefault(w => w.Id == id);
+                var productType = await _dBContext.ProductTypes.FirstOrDefaultAsync(w => w.Id == id);
 
                 if (productType == null)
                 {

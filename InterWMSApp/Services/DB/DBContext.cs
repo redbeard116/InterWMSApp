@@ -45,6 +45,8 @@ namespace InterWMSApp.Services.DB
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<RightsGrid> RightsGrids{ get; set; }
+        public DbSet<ProductStorage> ProductStorages { get; set; }
+        public DbSet<StorageArea> StorageAreas { get; set; }
         #endregion
     }
 }

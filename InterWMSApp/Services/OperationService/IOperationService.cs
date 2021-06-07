@@ -10,8 +10,8 @@ namespace InterWMSApp.Services.OperationService
 
         Task<Operation> GetOperation(int id);
 
-        Task<Operation> AddOperation(Operation counterparty);
-        Task<bool> DeleteOperationy(int id);
-        Task<Operation> EditOperation(Operation counterparty);
+        Task<Operation> AddOperation(Operation operation);
+        Task<bool> DeleteOperation(int id);
+        Task<Operation> EditOperation(Operation operation);
     }
 }

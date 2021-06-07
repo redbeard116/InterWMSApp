@@ -1,7 +1,13 @@
 using InterWMSApp.Models.AppSettings;
 using InterWMSApp.Services.AuthServices;
+using InterWMSApp.Services.ContractService;
+using InterWMSApp.Services.CounterpartyService;
 using InterWMSApp.Services.DB;
 using InterWMSApp.Services.DictionaryService;
+using InterWMSApp.Services.OperationService;
+using InterWMSApp.Services.ProductServices;
+using InterWMSApp.Services.ProductStorageService;
+using InterWMSApp.Services.StorageAreaService;
 using InterWMSApp.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -61,6 +67,12 @@ namespace InterWMSApp
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IDictionaryService, DictionaryService>();
+            services.AddSingleton<IContractService, ContractService>();
+            services.AddSingleton<ICounterpartyService, CounterpartyService>();
+            services.AddSingleton<IOperationService, OperationService>();
+            services.AddSingleton<IProductServices, ProductService>();
+            services.AddSingleton<IProductStorageService, ProductStorageService>();
+            services.AddSingleton<IStorageAreaService, StorageAreaService>();
             services.AddSingleton(_appSettings);
             services.AddSignalR();
             services.AddControllers();
@@ -85,10 +97,6 @@ namespace InterWMSApp
             {
                 endpoints.MapControllers();
             });
-
-            var asd = app.ApplicationServices.GetService<IUserService>();
-
-            var das = asd.DeleteUser(1).Result;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using InterWMSApp.Models;
 using InterWMSApp.Services.DB;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -79,7 +80,7 @@ namespace InterWMSApp.Services.ProductServices
             try
             {
                 _logger.LogInformation($"DeleteProduct {id}");
-                var product = _dBContext.Products.FirstOrDefault(w=>w.Id==id);
+                var product = await _dBContext.Products.FirstOrDefaultAsync(w=>w.Id==id);
                 _dBContext.Products.Remove(product);
                 await _dBContext.SaveChangesAsync();
                 return true;

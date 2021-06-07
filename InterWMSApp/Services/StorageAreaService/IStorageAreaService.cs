@@ -6,12 +6,12 @@ namespace InterWMSApp.Services.StorageAreaService
 {
     interface IStorageAreaService
     {
-        IEnumerable<StorageArea> GetStorageArea();
+        IEnumerable<StorageArea> GetStorageAreas();
 
         Task<StorageArea> GetStorageArea(int id);
 
-        Task<StorageArea> AddStorageArea(StorageArea counterparty);
-        Task<bool> DeleteProductStorage(int id);
-        Task<StorageArea> EditStorageArea(StorageArea counterparty);
+        Task<StorageArea> AddStorageArea(StorageArea storageArea);
+        Task<bool> DeleteStorageArea(int id);
+        Task<StorageArea> EditStorageArea(StorageArea storageArea);
     }
 }

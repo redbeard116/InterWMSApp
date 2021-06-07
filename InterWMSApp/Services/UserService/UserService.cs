@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace InterWMSApp.Services.UserService
@@ -47,7 +46,10 @@ namespace InterWMSApp.Services.UserService
             try
             {
                 _logger.LogInformation($"DeleteUser {id}");
-                var user = _dBContext.Users.FirstOrDefault(w => w.Id == id);
+                var user = await _dBContext.Users.FirstOrDefaultAsync(w => w.Id == id);
+                var auth = await _dBContext.Auths.FirstOrDefaultAsync(w => w.UserId == user.Id);
+                _dBContext.Auths.Remove(auth);
+                _dBContext.Users.Remove(user);
                 await _dBContext.SaveChangesAsync();
                 return true;
             }
@@ -63,7 +65,7 @@ namespace InterWMSApp.Services.UserService
             try
             {
                 _logger.LogInformation($"EditRent {user.Id}");
-                var result = _dBContext.Users.FirstOrDefault(w => w.Id == user.Id);
+                var result = await _dBContext.Users.FirstOrDefaultAsync(w => w.Id == user.Id);
                 if (result != null)
                 {
                     if (result.Role != user.Role && user.Role == UserRole.Admin)
@@ -116,7 +118,7 @@ namespace InterWMSApp.Services.UserService
                 _logger.LogError($"GetUsers error.\nMessage: {ex.Message}\nStack trace: {ex.StackTrace}");
                 return null;
             }
-        } 
+        }
         #endregion
     }
 }

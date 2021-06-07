@@ -10,8 +10,8 @@ namespace InterWMSApp.Services.ProductStorageService
 
         Task<ProductStorage> GetProductStorage(int id);
 
-        Task<ProductStorage> AddProductStorage(ProductStorage counterparty);
+        Task<ProductStorage> AddProductStorage(ProductStorage productStorage);
         Task<bool> DeleteProductStorage(int id);
-        Task<ProductStorage> EditProductStorage(ProductStorage counterparty);
+        Task<ProductStorage> EditProductStorage(ProductStorage productStorage);
     }
 }
