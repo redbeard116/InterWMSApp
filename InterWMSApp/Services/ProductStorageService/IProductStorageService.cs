@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace InterWMSApp.Services.ProductStorageService
 {
-    interface IProductStorageService
+    public interface IProductStorageService
     {
         IEnumerable<ProductStorage> GetProductStorages();
 

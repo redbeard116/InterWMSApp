@@ -1,5 +1,5 @@
 ﻿using InterWMSApp.Models;
-using InterWMSApp.Services.ContractService;
+using InterWMSApp.Services.ProductStorageService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,28 +15,27 @@ namespace InterWMSApp.Controllers
     {
         #region Fields
         private readonly ILogger<ProductStoragesController> _logger;
-        private readonly IContractService _contractService;
+        private readonly IProductStorageService _productStorageService;
         #endregion
-
 
         #region Constructor
         public ProductStoragesController(ILogger<ProductStoragesController> logger,
-                                         IContractService contractService)
+                                         IProductStorageService productStorageService)
         {
             _logger = logger;
-            _contractService = contractService;
+            _productStorageService = productStorageService;
         }
         #endregion
 
         #region Actions
         [HttpGet]
-        public async Task<IActionResult> GetContracts()
+        public async Task<IActionResult> GetProductStorages()
         {
             try
             {
-                _logger.LogInformation("get api/Contracts");
+                _logger.LogInformation("get api/ProductStorages");
 
-                var contracts = _contractService.GetContracts();
+                var contracts = _productStorageService.GetProductStorages();
 
                 return Ok(JsonConvert.SerializeObject(contracts));
             }
@@ -52,13 +51,13 @@ namespace InterWMSApp.Controllers
         /// <param name="id">Id продукта</param>
         /// <returns>Найденный продукт</returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetContract(int id)
+        public async Task<IActionResult> GetProductStorage(int id)
         {
             try
             {
-                _logger.LogInformation($"get api/Contracts/{id}");
+                _logger.LogInformation($"get api/ProductStorages/{id}");
 
-                var result = await _contractService.GetContract(id);
+                var result = await _productStorageService.GetProductStorage(id);
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
@@ -68,13 +67,13 @@ namespace InterWMSApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddContract([FromBody] Contract contract)
+        public async Task<IActionResult> AddProductStorage([FromBody] ProductStorage productStorage)
         {
             try
             {
-                _logger.LogInformation($"add api/Contracts");
+                _logger.LogInformation($"add api/ProductStorages");
 
-                var result = await _contractService.EditContract(contract);
+                var result = await _productStorageService.AddProductStorage(productStorage);
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
@@ -84,13 +83,13 @@ namespace InterWMSApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContract(int id)
+        public async Task<IActionResult> DeleteProductStorage(int id)
         {
             try
             {
-                _logger.LogInformation($"delete api/Contracts/{id}");
+                _logger.LogInformation($"delete api/ProductStorages/{id}");
 
-                var result = await _contractService.DeleteContract(id);
+                var result = await _productStorageService.DeleteProductStorage(id);
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
@@ -100,13 +99,13 @@ namespace InterWMSApp.Controllers
         }
 
         [HttpPut("edit")]
-        public async Task<IActionResult> EditContract([FromBody] Contract contract)
+        public async Task<IActionResult> EditProductStorage([FromBody] ProductStorage productStorage)
         {
             try
             {
-                _logger.LogInformation($"put api/Contracts/{contract.Id}");
+                _logger.LogInformation($"put api/ProductStorages/{productStorage.Id}");
 
-                var result = await _contractService.EditContract(contract);
+                var result = await _productStorageService.EditProductStorage(productStorage);
                     return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)

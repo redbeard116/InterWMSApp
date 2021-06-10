@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace InterWMSApp.Services.UserService
@@ -47,8 +48,10 @@ namespace InterWMSApp.Services.UserService
             {
                 _logger.LogInformation($"DeleteUser {id}");
                 var user = await _dBContext.Users.FirstOrDefaultAsync(w => w.Id == id);
+
                 var auth = await _dBContext.Auths.FirstOrDefaultAsync(w => w.UserId == user.Id);
-                _dBContext.Auths.Remove(auth);
+                if (auth != null)
+                    _dBContext.Auths.Remove(auth);
                 _dBContext.Users.Remove(user);
                 await _dBContext.SaveChangesAsync();
                 return true;
@@ -68,6 +71,7 @@ namespace InterWMSApp.Services.UserService
                 var result = await _dBContext.Users.FirstOrDefaultAsync(w => w.Id == user.Id);
                 if (result != null)
                 {
+
                     if (result.Role != user.Role && user.Role == UserRole.Admin)
                     {
                         return null;
@@ -111,7 +115,7 @@ namespace InterWMSApp.Services.UserService
             try
             {
                 _logger.LogInformation("GetUsers");
-                return _dBContext.Users;
+                return _dBContext.Users.Where(w => w.Role != UserRole.Counterparty);
             }
             catch (Exception ex)
             {

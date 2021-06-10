@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace InterWMSApp.Services.ProductServices
+namespace InterWMSApp.Services.ProductService
 {
-    public interface IProductServices
+    public interface IProductService
     {
         IEnumerable<Product> GetProducts();
         Task<Product> GetProduct(int id);

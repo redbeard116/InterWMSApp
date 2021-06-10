@@ -1,5 +1,4 @@
 ﻿using InterWMSApp.Models.Abstract;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -9,12 +8,6 @@ namespace InterWMSApp.Models
     [Table("users", Schema = "public")]
     public class User : BaseModel
     {
-        public User()
-        {
-            Counterparties = new List<Counterparty>();
-            Auths = new List<Auth>();
-        }
-
         [Column("firstname"), Required]
         public string FirstName { get; set; }
 
@@ -25,15 +18,16 @@ namespace InterWMSApp.Models
         public UserRole Role { get; set; }
 
         [JsonIgnore]
-        public List<Counterparty> Counterparties { get; set; }
+        public virtual Counterparty Counterparty { get; set; }
         [JsonIgnore]
-        public List<Auth> Auths { get; set; }
+        public virtual Auth Auth { get; set; }
     }
 
     public enum UserRole
     {
         Admin,
-        Сounterparty,
-        Manager
+        Logistics,
+        Manager,
+        Counterparty
     }
 }

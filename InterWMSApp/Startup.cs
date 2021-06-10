@@ -1,3 +1,4 @@
+using InterWMSApp.Models;
 using InterWMSApp.Models.AppSettings;
 using InterWMSApp.Services.AuthServices;
 using InterWMSApp.Services.ContractService;
@@ -5,7 +6,8 @@ using InterWMSApp.Services.CounterpartyService;
 using InterWMSApp.Services.DB;
 using InterWMSApp.Services.DictionaryService;
 using InterWMSApp.Services.OperationService;
-using InterWMSApp.Services.ProductServices;
+using InterWMSApp.Services.ProductPriceService;
+using InterWMSApp.Services.ProductService;
 using InterWMSApp.Services.ProductStorageService;
 using InterWMSApp.Services.StorageAreaService;
 using InterWMSApp.Services.UserService;
@@ -16,6 +18,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 namespace InterWMSApp
 {
@@ -60,7 +65,21 @@ namespace InterWMSApp
                     });
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
+
+            services.AddAuthorization(options =>
+            {
+                foreach (var role in Enum.GetValues(typeof(UserRole)).Cast<UserRole>())
+                {
+                    options.AddPolicy(role.ToString(),
+                   authBuilder =>
+                   {
+                       authBuilder.RequireRole(role.ToString());
+                   });
+                }
+            });
 
             Configuration.GetSection("AppSettings").Bind(_appSettings);
             services.AddDbContext<DBContext>(ServiceLifetime.Transient);
@@ -70,9 +89,10 @@ namespace InterWMSApp
             services.AddSingleton<IContractService, ContractService>();
             services.AddSingleton<ICounterpartyService, CounterpartyService>();
             services.AddSingleton<IOperationService, OperationService>();
-            services.AddSingleton<IProductServices, ProductService>();
+            services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<IProductStorageService, ProductStorageService>();
             services.AddSingleton<IStorageAreaService, StorageAreaService>();
+            services.AddSingleton<IProductPriceService, ProductPriceService>();
             services.AddSingleton(_appSettings);
             services.AddSignalR();
             services.AddControllers();

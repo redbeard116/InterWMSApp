@@ -20,5 +20,7 @@ namespace InterWMSApp.Models
 
         [Column("date"), Required]
         public long Date { get; set; }
+        [Column("sum"), Required]
+        public double Sum { get; set; }
     }
 }

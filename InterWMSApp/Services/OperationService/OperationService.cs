@@ -59,17 +59,16 @@ namespace InterWMSApp.Services.OperationService
             }
         }
 
-        public async Task<Operation> EditOperation(Operation oparation)
+        public async Task<Operation> EditOperation(Operation operation)
         {
             try
             {
-                _logger.LogInformation($"Edit operation {oparation.Id}");
-                var result = _dBContext.Operations.FirstOrDefault(w => w.Id == oparation.Id);
+                _logger.LogInformation($"Edit operation {operation.Id}");
+                var result = _dBContext.Operations.FirstOrDefault(w => w.Id == operation.Id);
                 if (result != null)
                 {
-                    result.Count = oparation.Count;
-                    result.Date = oparation.Date;
-                    result.ProductId = oparation.ProductId;
+                    result.Count = operation.Count;
+                    result.ProductId = operation.ProductId;
                     await _dBContext.SaveChangesAsync();
                     return result;
                 }

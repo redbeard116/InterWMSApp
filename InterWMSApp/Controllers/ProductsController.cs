@@ -1,5 +1,5 @@
 ﻿using InterWMSApp.Models;
-using InterWMSApp.Services.ProductServices;
+using InterWMSApp.Services.ProductService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,13 +15,12 @@ namespace InterWMSApp.Controllers
     {
         #region Fields
         private readonly ILogger<ProductsController> _logger;
-        private readonly IProductServices _productServices;
+        private readonly IProductService _productServices;
         #endregion
-
 
         #region Constructor
         public ProductsController(ILogger<ProductsController> logger,
-                                  IProductServices productServices)
+                                  IProductService productServices)
         {
             _logger = logger;
             _productServices = productServices;
@@ -91,10 +90,10 @@ namespace InterWMSApp.Controllers
             return BadRequest("Ошибка при удалении задания");
         }
 
-        [HttpPut("edit")]
-        public async Task<IActionResult> EditProduct([FromBody] Product product)
+        [HttpPut("edit/{id}")]
+        public async Task<IActionResult> EditProduct(int id, [FromBody] Product product)
         {
-            _logger.LogInformation($"EditProduct {product.Id}");
+            _logger.LogInformation($"EditProduct {id}");
 
             var result = await _productServices.EditProduct(product);
             if (result != null)

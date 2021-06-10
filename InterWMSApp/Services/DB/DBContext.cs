@@ -25,14 +25,16 @@ namespace InterWMSApp.Services.DB
             modelBuilder.Entity<Auth>().HasIndex(w => w.Login).IsUnique();
             modelBuilder.Entity<RightsGrid>().HasIndex(w => w.UserRole).IsUnique();
 
-            modelBuilder.Entity<Auth>().HasOne(w => w.User).WithMany(w => w.Auths).HasForeignKey(w => w.UserId);
+            modelBuilder.Entity<Auth>().HasOne(w => w.User).WithOne(w => w.Auth);
             modelBuilder.Entity<Product>().HasOne(p => p.ProductType).WithMany(t => t.Products).HasForeignKey(p => p.TypeId);
             modelBuilder.Entity<Contract>().HasOne(w => w.Counterparty).WithMany(w => w.Contracts).HasForeignKey(w => w.CounterpartyId);
-            modelBuilder.Entity<Counterparty>().HasOne(w => w.User).WithMany(w => w.Counterparties).HasForeignKey(w => w.UserId);
+            modelBuilder.Entity<Counterparty>().HasOne(w => w.User).WithOne(w => w.Counterparty);
             modelBuilder.Entity<Operation>().HasOne(w => w.Product).WithMany(w => w.Operations).HasForeignKey(w => w.ProductId);
             modelBuilder.Entity<ProductStorage>().HasOne(w => w.Product).WithMany(w => w.ProductStorages).HasForeignKey(w => w.ProductId);
             modelBuilder.Entity<ProductStorage>().HasOne(w => w.StorageArea).WithMany(w => w.ProductStorages).HasForeignKey(w => w.StorageAreaId);
             modelBuilder.Entity<RightsGrid>().HasOne(w => w.AccessType).WithMany(w => w.RightsGrids).HasForeignKey(w => w.AccessTypeId);
+            modelBuilder.Entity<ProductPrice>().HasOne(w => w.Product).WithMany(w => w.ProductPrices).HasForeignKey(w=>w.ProductId);
+            modelBuilder.Entity<OperationProduct>().HasOne(w => w.Product).WithMany(w => w.OperationProducts).HasForeignKey(w=>w.ProductId);
         }
 
         #region DbSet
@@ -47,6 +49,8 @@ namespace InterWMSApp.Services.DB
         public DbSet<RightsGrid> RightsGrids{ get; set; }
         public DbSet<ProductStorage> ProductStorages { get; set; }
         public DbSet<StorageArea> StorageAreas { get; set; }
+        public DbSet<ProductPrice> ProductPrices { get; set; }
+        //public DbSet<OperationProduct> OperationProducts { get; set; }
         #endregion
     }
 }

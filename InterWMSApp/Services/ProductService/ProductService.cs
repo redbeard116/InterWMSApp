@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace InterWMSApp.Services.ProductServices
+namespace InterWMSApp.Services.ProductService
 {
-    internal class ProductService : IProductServices
+    internal class ProductService : IProductService
     {
         #region Fields
         private readonly ILogger<ProductService> _logger;

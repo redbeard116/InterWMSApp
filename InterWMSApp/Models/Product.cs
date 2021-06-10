@@ -13,6 +13,8 @@ namespace InterWMSApp.Models
         {
             ProductStorages = new List<ProductStorage>();
             Operations = new List<Operation>();
+            ProductPrices = new List<ProductPrice>();
+            OperationProducts = new List<OperationProduct>();
         }
 
         [Column("name"), Required]
@@ -25,5 +27,9 @@ namespace InterWMSApp.Models
         public List<ProductStorage> ProductStorages { get; set; }
         [JsonIgnore]
         public List<Operation> Operations { get; set; }
+        [JsonIgnore]
+        public List<ProductPrice> ProductPrices { get; set; }
+        [JsonIgnore]
+        public List<OperationProduct> OperationProducts { get; set; }
     }
 }

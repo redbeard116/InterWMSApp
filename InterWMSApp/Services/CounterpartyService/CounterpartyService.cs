@@ -1,5 +1,6 @@
 ﻿using InterWMSApp.Models;
 using InterWMSApp.Services.DB;
+using InterWMSApp.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,14 +15,17 @@ namespace InterWMSApp.Services.CounterpartyService
         #region Fields
         private readonly ILogger<CounterpartyService> _logger;
         private readonly DBContext _dBContext;
+        private readonly IUserService _userService;
         #endregion
 
         #region Constructor
         public CounterpartyService(ILogger<CounterpartyService> logger,
-                                   DBContext dBContext)
+                                   DBContext dBContext,
+                                   IUserService userService)
         {
             _logger = logger;
             _dBContext = dBContext;
+            _userService = userService;
         }
         #endregion
 
@@ -48,9 +52,14 @@ namespace InterWMSApp.Services.CounterpartyService
             {
                 _logger.LogInformation($"Delete counterparty {id}");
                 var result = await _dBContext.Counterparties.FirstOrDefaultAsync(w => w.Id == id);
-                _dBContext.Counterparties.Remove(result);
-                await _dBContext.SaveChangesAsync();
-                return true;
+
+                if (result != null)
+                {
+                    await _userService.DeleteUser(result.UserId);
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
@@ -67,6 +76,7 @@ namespace InterWMSApp.Services.CounterpartyService
                 var result = await _dBContext.Counterparties.FirstOrDefaultAsync(w => w.Id == counterparty.Id);
                 if (result != null)
                 {
+                    result.User = counterparty.User;
                     result.UserId = counterparty.UserId;
                     result.INN = counterparty.INN;
                     result.Account = counterparty.Account;

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace InterWMSApp.Services.OperationService
 {
-    interface IOperationService
+    public interface IOperationService
     {
         IEnumerable<Operation> GetOperations();
 

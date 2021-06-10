@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace InterWMSApp.Services.CounterpartyService
 {
-    interface ICounterpartyService
+    public interface ICounterpartyService
     {
         IEnumerable<Counterparty> GetCounterpartyes();
 

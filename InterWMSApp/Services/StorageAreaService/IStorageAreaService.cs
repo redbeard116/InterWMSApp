@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace InterWMSApp.Services.StorageAreaService
 {
-    interface IStorageAreaService
+    public interface IStorageAreaService
     {
         IEnumerable<StorageArea> GetStorageAreas();
 

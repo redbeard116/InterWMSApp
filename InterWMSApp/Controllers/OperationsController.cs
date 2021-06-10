@@ -1,5 +1,5 @@
 ﻿using InterWMSApp.Models;
-using InterWMSApp.Services.ContractService;
+using InterWMSApp.Services.OperationService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,28 +15,27 @@ namespace InterWMSApp.Controllers
     {
         #region Fields
         private readonly ILogger<OperationsController> _logger;
-        private readonly IContractService _contractService;
+        private readonly IOperationService _operationService;
         #endregion
-
 
         #region Constructor
         public OperationsController(ILogger<OperationsController> logger,
-                                    IContractService contractService)
+                                    IOperationService operationService)
         {
             _logger = logger;
-            _contractService = contractService;
+            _operationService = operationService;
         }
         #endregion
 
         #region Actions
         [HttpGet]
-        public async Task<IActionResult> GetContracts()
+        public async Task<IActionResult> GetOperations()
         {
             try
             {
-                _logger.LogInformation("get api/Contracts");
+                _logger.LogInformation("get api/Operations");
 
-                var contracts = _contractService.GetContracts();
+                var contracts = _operationService.GetOperations();
 
                 return Ok(JsonConvert.SerializeObject(contracts));
             }
@@ -52,13 +51,13 @@ namespace InterWMSApp.Controllers
         /// <param name="id">Id продукта</param>
         /// <returns>Найденный продукт</returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetContract(int id)
+        public async Task<IActionResult> GetOperation(int id)
         {
             try
             {
-                _logger.LogInformation($"get api/Contracts/{id}");
+                _logger.LogInformation($"get api/Operations/{id}");
 
-                var result = await _contractService.GetContract(id);
+                var result = await _operationService.GetOperation(id);
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
@@ -68,13 +67,13 @@ namespace InterWMSApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddContract([FromBody] Contract contract)
+        public async Task<IActionResult> AddOperation([FromBody] Operation operation)
         {
             try
             {
-                _logger.LogInformation($"add api/Contracts");
+                _logger.LogInformation($"add api/Operations");
 
-                var result = await _contractService.EditContract(contract);
+                var result = await _operationService.AddOperation(operation);
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
@@ -84,13 +83,13 @@ namespace InterWMSApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContract(int id)
+        public async Task<IActionResult> DeleteOperation(int id)
         {
             try
             {
-                _logger.LogInformation($"delete api/Contracts/{id}");
+                _logger.LogInformation($"delete api/Operations/{id}");
 
-                var result = await _contractService.DeleteContract(id);
+                var result = await _operationService.DeleteOperation(id);
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
@@ -99,14 +98,14 @@ namespace InterWMSApp.Controllers
             }
         }
 
-        [HttpPut("edit")]
-        public async Task<IActionResult> EditContract([FromBody] Contract contract)
+        [HttpPut("edit/{id}")]
+        public async Task<IActionResult> EditOperation(int id, [FromBody] Operation operation)
         {
             try
             {
-                _logger.LogInformation($"put api/Contracts/{contract.Id}");
+                _logger.LogInformation($"put api/Operations/{id}");
 
-                var result = await _contractService.EditContract(contract);
+                var result = await _operationService.EditOperation(operation);
                     return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)

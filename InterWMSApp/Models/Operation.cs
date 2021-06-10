@@ -1,5 +1,4 @@
 ﻿using InterWMSApp.Models.Abstract;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,8 +18,9 @@ namespace InterWMSApp.Models
         [Column("count"), Required]
         public int Count { get; set; }
 
-        [Column("date"), Required]
-        public long Date { get; set; }
+        //[Column("products")]
+        //public List<int> OperationProductsIds { get; set; }
+        //public List<OperationProduct> OperationProducts { get; set; }
     }
 
     public enum OperationType

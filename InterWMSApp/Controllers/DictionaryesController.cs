@@ -10,7 +10,7 @@ namespace InterWMSApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize("Admin")]
+    [Authorize]
     public class DictionaryesController : ControllerBase
     {
         #region Fields
@@ -47,6 +47,7 @@ namespace InterWMSApp.Controllers
 
         //POST api/<DictionaryesController>/accessytypes
         [HttpPost("accessytypes")]
+        [Authorize("Admin")]
         public async Task<IActionResult> AddAccessType([FromBody] AccessType accessType)
         {
             try
@@ -64,11 +65,12 @@ namespace InterWMSApp.Controllers
 
         //DELETE api/<DictionaryesController>/accessytypes/:id
         [HttpDelete("accessytypes/{id}")]
+        [Authorize("Admin")]
         public async Task<IActionResult> DeleteAccessType(int id)
         {
             try
             {
-                _logger.LogDebug("Add access type");
+                _logger.LogDebug("Delete access type");
                 var result = await _dictionaryService.DeleteAccessType(id);
                 if (result)
                 {
@@ -103,6 +105,7 @@ namespace InterWMSApp.Controllers
 
         //POST api/<DictionaryesController>/accessytypes
         [HttpPost("producttypes")]
+        [Authorize("Admin")]
         public async Task<IActionResult> AddProductTypes([FromBody] ProductType productType)
         {
             try
@@ -120,11 +123,12 @@ namespace InterWMSApp.Controllers
 
         //DELETE api/<DictionaryesController>/accessytypes/:id
         [HttpDelete("producttypes/{id}")]
+        [Authorize("Admin")]
         public async Task<IActionResult> DeleteProductTypes(int id)
         {
             try
             {
-                _logger.LogDebug("Add product type");
+                _logger.LogDebug("Delete product type");
                 var result = await _dictionaryService.DeleteProductTypes(id);
                 if (result)
                 {
