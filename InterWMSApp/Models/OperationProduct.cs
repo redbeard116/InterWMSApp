@@ -9,10 +9,6 @@ namespace InterWMSApp.Models
     [Table("operationproducts", Schema = "public")]
     public class OperationProduct : BaseModel
     {
-        public OperationProduct()
-        {
-            Operations = new List<Operation>();
-        }
 
         [Column("productid"), Required]
         public int ProductId { get; set; }
@@ -21,8 +17,5 @@ namespace InterWMSApp.Models
 
         [Column("count"), Required]
         public int Count { get; set; }
-
-        [JsonIgnore]
-        public List<Operation> Operations { get; set; }
     }
 }

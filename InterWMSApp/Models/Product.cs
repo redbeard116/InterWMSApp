@@ -12,7 +12,6 @@ namespace InterWMSApp.Models
         public Product()
         {
             ProductStorages = new List<ProductStorage>();
-            Operations = new List<Operation>();
             ProductPrices = new List<ProductPrice>();
             OperationProducts = new List<OperationProduct>();
         }
@@ -25,8 +24,6 @@ namespace InterWMSApp.Models
         public ProductType ProductType { get; set; }
         [JsonIgnore]
         public List<ProductStorage> ProductStorages { get; set; }
-        [JsonIgnore]
-        public List<Operation> Operations { get; set; }
         [JsonIgnore]
         public List<ProductPrice> ProductPrices { get; set; }
         [JsonIgnore]

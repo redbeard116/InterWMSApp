@@ -69,7 +69,6 @@ namespace InterWMSApp.Services.ContractService
                 {
                     result.CounterpartyId = contract.CounterpartyId;
                     result.Date = contract.Date;
-                    result.OperationId = contract.OperationId;
                     result.Sum = contract.Sum;
                     await _dBContext.SaveChangesAsync();
                     return result;

@@ -19,7 +19,7 @@ namespace InterWMSApp.Services.DB
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().Property(w => w.Role).HasConversion<string>();
-            modelBuilder.Entity<Operation>().Property(w => w.Type).HasConversion<string>();
+            modelBuilder.Entity<Contract>().Property(w => w.Type).HasConversion<string>();
             modelBuilder.Entity<RightsGrid>().Property(w => w.UserRole).HasConversion<string>();
 
             modelBuilder.Entity<Auth>().HasIndex(w => w.Login).IsUnique();
@@ -29,7 +29,6 @@ namespace InterWMSApp.Services.DB
             modelBuilder.Entity<Product>().HasOne(p => p.ProductType).WithMany(t => t.Products).HasForeignKey(p => p.TypeId);
             modelBuilder.Entity<Contract>().HasOne(w => w.Counterparty).WithMany(w => w.Contracts).HasForeignKey(w => w.CounterpartyId);
             modelBuilder.Entity<Counterparty>().HasOne(w => w.User).WithOne(w => w.Counterparty);
-            modelBuilder.Entity<Operation>().HasOne(w => w.Product).WithMany(w => w.Operations).HasForeignKey(w => w.ProductId);
             modelBuilder.Entity<ProductStorage>().HasOne(w => w.Product).WithMany(w => w.ProductStorages).HasForeignKey(w => w.ProductId);
             modelBuilder.Entity<ProductStorage>().HasOne(w => w.StorageArea).WithMany(w => w.ProductStorages).HasForeignKey(w => w.StorageAreaId);
             modelBuilder.Entity<RightsGrid>().HasOne(w => w.AccessType).WithMany(w => w.RightsGrids).HasForeignKey(w => w.AccessTypeId);
@@ -43,7 +42,6 @@ namespace InterWMSApp.Services.DB
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<AccessType> AccessTypes { get; set; }
         public DbSet<Counterparty> Counterparties { get; set; }
-        public DbSet<Operation> Operations { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<RightsGrid> RightsGrids{ get; set; }

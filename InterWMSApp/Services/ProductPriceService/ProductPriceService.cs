@@ -24,7 +24,7 @@ namespace InterWMSApp.Services.ProductPriceService
         }
         #endregion
 
-        #region IOperationService
+        #region IProductPriceService
         public async Task<ProductPrice> AddProductPrice(ProductPrice productPrice)
         {
             try

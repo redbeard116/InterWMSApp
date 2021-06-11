@@ -5,7 +5,6 @@ using InterWMSApp.Services.ContractService;
 using InterWMSApp.Services.CounterpartyService;
 using InterWMSApp.Services.DB;
 using InterWMSApp.Services.DictionaryService;
-using InterWMSApp.Services.OperationService;
 using InterWMSApp.Services.ProductPriceService;
 using InterWMSApp.Services.ProductService;
 using InterWMSApp.Services.ProductStorageService;
@@ -88,7 +87,6 @@ namespace InterWMSApp
             services.AddSingleton<IDictionaryService, DictionaryService>();
             services.AddSingleton<IContractService, ContractService>();
             services.AddSingleton<ICounterpartyService, CounterpartyService>();
-            services.AddSingleton<IOperationService, OperationService>();
             services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<IProductStorageService, ProductStorageService>();
             services.AddSingleton<IStorageAreaService, StorageAreaService>();

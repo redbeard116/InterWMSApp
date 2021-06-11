@@ -143,24 +143,6 @@ namespace InterWMSApp.Controllers
             }
         }
 
-
-        // GET api/<DictionaryesController>/operationtypes
-        [HttpGet("operationtypes")]
-        public IActionResult GetOperationTypes()
-        {
-            try
-            {
-                _logger.LogDebug("api/dictionatryes/operationtypes");
-                var types = _dictionaryService.GetOperationTypes();
-                var json = JsonConvert.SerializeObject(types);
-                return Ok(json);
-            }
-            catch (System.Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         // GET api/<DictionaryesController>/userroles
         [HttpGet("userroles")]
         public IActionResult GetUserRoles()
