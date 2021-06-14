@@ -14,5 +14,7 @@ namespace InterWMSApp.Models
 
         [Column("cost")]
         public double Cost { get; set; }
+        [Column("date")]
+        public long Date { get; set; }
     }
 }

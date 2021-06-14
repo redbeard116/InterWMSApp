@@ -106,7 +106,7 @@ namespace InterWMSApp.Controllers
                 _logger.LogInformation($"put api/ProductStorages/{productStorage.Id}");
 
                 var result = await _productStorageService.EditProductStorage(productStorage);
-                    return Ok(JsonConvert.SerializeObject(result));
+                return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
             {

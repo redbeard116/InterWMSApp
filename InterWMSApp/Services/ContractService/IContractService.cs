@@ -6,12 +6,12 @@ namespace InterWMSApp.Services.ContractService
 {
     public interface IContractService
     {
-        IEnumerable<Contract> GetContracts();
+        IEnumerable<ContractApiM> GetContracts();
 
-        Task<Contract> GetContract(int id);
+        Task<ContractApiM> GetContract(int id);
 
-        Task<Contract> AddContract(Contract contract);
+        Task<ContractApiM> AddContract(ContractApiM contract);
         Task<bool> DeleteContract(int id);
-        Task<Contract> EditContract(Contract contract);
+        Task<ContractApiM> EditContract(ContractApiM contract);
     }
 }

@@ -1,4 +1,5 @@
-﻿using InterWMSApp.Models;
+﻿using InterWMSApp.Extensions;
+using InterWMSApp.Models;
 using InterWMSApp.Services.ContractService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -67,13 +68,13 @@ namespace InterWMSApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddContract([FromBody] Contract contract)
+        public async Task<IActionResult> AddContract()
         {
             try
             {
                 _logger.LogInformation($"add api/Contracts");
-
-                var result = await _contractService.AddContract(contract);
+                var body = await this.GetStringFromBody();
+                var result = await _contractService.AddContract(JsonConvert.DeserializeObject<ContractApiM>(body));
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
@@ -99,14 +100,14 @@ namespace InterWMSApp.Controllers
         }
 
         [HttpPut("edit/{id}")]
-        public async Task<IActionResult> EditContract(int id, [FromBody] Contract contract)
+        public async Task<IActionResult> EditContract(int id)
         {
             try
             {
                 _logger.LogInformation($"put api/Contracts/{id}");
-
-                var result = await _contractService.EditContract(contract);
-                    return Ok(JsonConvert.SerializeObject(result));
+                var body = await this.GetStringFromBody();
+                var result = await _contractService.EditContract(JsonConvert.DeserializeObject<ContractApiM>(body));
+                return Ok(JsonConvert.SerializeObject(result));
             }
             catch (System.Exception ex)
             {

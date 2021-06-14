@@ -62,11 +62,7 @@ namespace InterWMSApp
                             ValidateIssuerSigningKey = true,
                         };
                     });
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                });
+            services.AddControllersWithViews();
 
             services.AddAuthorization(options =>
             {

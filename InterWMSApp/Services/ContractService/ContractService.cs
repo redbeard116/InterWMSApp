@@ -26,13 +26,15 @@ namespace InterWMSApp.Services.ContractService
         #endregion
 
         #region IContractService
-        public async Task<Contract> AddContract(Contract contract)
+        public async Task<ContractApiM> AddContract(ContractApiM contract)
         {
             try
             {
                 _logger.LogInformation("Add new contract");
-                await _dBContext.Contracts.AddAsync(contract);
+                var contractDb = contract.GetContract();
+                await _dBContext.Contracts.AddAsync(contractDb);
                 await _dBContext.SaveChangesAsync();
+                contract.Id = contractDb.Id;
                 return contract;
             }
             catch (Exception ex)
@@ -59,7 +61,7 @@ namespace InterWMSApp.Services.ContractService
             }
         }
 
-        public async Task<Contract> EditContract(Contract contract)
+        public async Task<ContractApiM> EditContract(ContractApiM contract)
         {
             try
             {
@@ -67,11 +69,11 @@ namespace InterWMSApp.Services.ContractService
                 var result = await _dBContext.Contracts.FirstOrDefaultAsync(w => w.Id == contract.Id);
                 if (result != null)
                 {
-                    result.CounterpartyId = contract.CounterpartyId;
+                    result.CounterpartyId = contract.Counterparty.Id;
                     result.Date = contract.Date;
                     result.Sum = contract.Sum;
                     await _dBContext.SaveChangesAsync();
-                    return result;
+                    return contract;
                 }
                 return null;
             }
@@ -82,7 +84,7 @@ namespace InterWMSApp.Services.ContractService
             }
         }
 
-        public async Task<Contract> GetContract(int id)
+        public async Task<ContractApiM> GetContract(int id)
         {
             try
             {
@@ -90,7 +92,7 @@ namespace InterWMSApp.Services.ContractService
                 var result = await _dBContext.Contracts.FindAsync(id);
                 if (result != null)
                 {
-                    return result;
+                    return result.GetContractApiM();
                 }
                 return null;
             }
@@ -101,12 +103,12 @@ namespace InterWMSApp.Services.ContractService
             }
         }
 
-        public IEnumerable<Contract> GetContracts()
+        public IEnumerable<ContractApiM> GetContracts()
         {
             try
             {
                 _logger.LogInformation("Get contracts");
-                return _dBContext.Contracts;
+                return _dBContext.Contracts.Select(w => w.GetContractApiM());
             }
             catch (Exception ex)
             {

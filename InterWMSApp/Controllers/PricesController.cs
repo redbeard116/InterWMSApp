@@ -26,6 +26,23 @@ namespace InterWMSApp.Controllers
         #endregion
 
         #region Actions
+        [HttpGet("last")]
+        public async Task<IActionResult> GetLastPrice()
+        {
+            try
+            {
+                _logger.LogInformation("get api/Prices/last");
+
+                var result = await _productPriceService.GetLastPrices();
+
+                return Ok(JsonConvert.SerializeObject(result));
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         public IActionResult GetProductPrices()
         {

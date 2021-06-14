@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace InterWMSApp.Services.ProductPriceService
@@ -80,6 +81,24 @@ namespace InterWMSApp.Services.ProductPriceService
             }
         }
 
+        public async Task<IEnumerable<ProductPrice>> GetLastPrices()
+        {
+            try
+            {
+                _logger.LogInformation("Get last product prices");
+
+                var groupPrices = (await _dBContext.ProductPrices.Include(w=>w.Product).ToListAsync()).GroupBy(w=>w.ProductId);
+
+
+                return groupPrices.Select(w=>w.LastOrDefault());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {nameof(GetLastPrices)}");
+                throw;
+            }
+        }
+
         public async Task<ProductPrice> GetProductPrice(int id)
         {
             try
@@ -104,7 +123,7 @@ namespace InterWMSApp.Services.ProductPriceService
             try
             {
                 _logger.LogInformation("Get product prices");
-                return _dBContext.ProductPrices;
+                return _dBContext.ProductPrices.Include(w => w.Product);
             }
             catch (Exception ex)
             {

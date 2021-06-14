@@ -2,24 +2,24 @@
 
 namespace InterWMSApp.Migrations
 {
-    public partial class AddStorage : Migration
+    public partial class AddDateProductPrice : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "name",
+            migrationBuilder.AddColumn<long>(
+                name: "date",
                 schema: "public",
-                table: "operations",
-                newName: "productid");
+                table: "prices",
+                nullable: false,
+                defaultValue: 0L);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "productid",
+            migrationBuilder.DropColumn(
+                name: "date",
                 schema: "public",
-                table: "operations",
-                newName: "name");
+                table: "prices");
         }
     }
 }

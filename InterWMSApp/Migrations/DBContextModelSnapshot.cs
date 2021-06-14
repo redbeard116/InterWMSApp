@@ -88,10 +88,6 @@ namespace InterWMSApp.Migrations
                         .HasColumnName("date")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnName("productid")
-                        .HasColumnType("integer");
-
                     b.Property<double>("Sum")
                         .HasColumnName("sum")
                         .HasColumnType("double precision");
@@ -104,8 +100,6 @@ namespace InterWMSApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CounterpartyId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("contracts","public");
                 });
@@ -140,13 +134,7 @@ namespace InterWMSApp.Migrations
 
             modelBuilder.Entity("InterWMSApp.Models.OperationProduct", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("Count")
+                    b.Property<int>("ContractId")
                         .HasColumnName("count")
                         .HasColumnType("integer");
 
@@ -154,7 +142,11 @@ namespace InterWMSApp.Migrations
                         .HasColumnName("productid")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Count")
+                        .HasColumnName("count")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ContractId", "ProductId");
 
                     b.HasIndex("ProductId");
 
@@ -196,6 +188,10 @@ namespace InterWMSApp.Migrations
                     b.Property<double>("Cost")
                         .HasColumnName("cost")
                         .HasColumnType("double precision");
+
+                    b.Property<long>("Date")
+                        .HasColumnName("date")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("ProductId")
                         .HasColumnName("productid")
@@ -338,12 +334,6 @@ namespace InterWMSApp.Migrations
                         .HasForeignKey("CounterpartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("InterWMSApp.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("InterWMSApp.Models.Counterparty", b =>
@@ -357,6 +347,12 @@ namespace InterWMSApp.Migrations
 
             modelBuilder.Entity("InterWMSApp.Models.OperationProduct", b =>
                 {
+                    b.HasOne("InterWMSApp.Models.Contract", "Contract")
+                        .WithMany("OperationProducts")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("InterWMSApp.Models.Product", "Product")
                         .WithMany("OperationProducts")
                         .HasForeignKey("ProductId")

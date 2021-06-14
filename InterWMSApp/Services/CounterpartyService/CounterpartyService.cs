@@ -116,7 +116,7 @@ namespace InterWMSApp.Services.CounterpartyService
             try
             {
                 _logger.LogInformation("Get ounterpartyes");
-                return _dBContext.Counterparties;
+                return _dBContext.Counterparties.Include(w=>w.User);
             }
             catch (Exception ex)
             {

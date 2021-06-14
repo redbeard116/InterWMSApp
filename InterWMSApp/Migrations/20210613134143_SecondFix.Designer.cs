@@ -9,8 +9,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InterWMSApp.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20210603202919_AddStorage")]
-    partial class AddStorage
+    [Migration("20210613134143_SecondFix")]
+    partial class SecondFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,6 +64,9 @@ namespace InterWMSApp.Migrations
                     b.HasIndex("Login")
                         .IsUnique();
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("auths","public");
                 });
 
@@ -75,6 +78,10 @@ namespace InterWMSApp.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int>("Count")
+                        .HasColumnName("count")
+                        .HasColumnType("integer");
+
                     b.Property<int>("CounterpartyId")
                         .HasColumnName("counterpartyid")
                         .HasColumnType("integer");
@@ -83,11 +90,18 @@ namespace InterWMSApp.Migrations
                         .HasColumnName("date")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("OperationId")
-                        .HasColumnName("operationid")
-                        .HasColumnType("integer");
+                    b.Property<double>("Sum")
+                        .HasColumnName("sum")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnName("type")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CounterpartyId");
 
                     b.ToTable("contracts","public");
                 });
@@ -114,37 +128,27 @@ namespace InterWMSApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("counterpartyes","public");
                 });
 
-            modelBuilder.Entity("InterWMSApp.Models.Operation", b =>
+            modelBuilder.Entity("InterWMSApp.Models.OperationProduct", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("Count")
+                    b.Property<int>("ContractId")
                         .HasColumnName("count")
                         .HasColumnType("integer");
-
-                    b.Property<long>("Date")
-                        .HasColumnName("date")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("ProductId")
                         .HasColumnName("productid")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnName("type")
-                        .HasColumnType("text");
+                    b.HasKey("ContractId", "ProductId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("ProductId");
 
-                    b.ToTable("operations","public");
+                    b.ToTable("operationproducts","public");
                 });
 
             modelBuilder.Entity("InterWMSApp.Models.Product", b =>
@@ -166,7 +170,57 @@ namespace InterWMSApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TypeId");
+
                     b.ToTable("products","public");
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.ProductPrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<double>("Cost")
+                        .HasColumnName("cost")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnName("productid")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("prices","public");
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.ProductStorage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ProductId")
+                        .HasColumnName("productid")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StorageAreaId")
+                        .HasColumnName("storageareaid")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("StorageAreaId");
+
+                    b.ToTable("productstorage","public");
                 });
 
             modelBuilder.Entity("InterWMSApp.Models.ProductType", b =>
@@ -188,6 +242,12 @@ namespace InterWMSApp.Migrations
 
             modelBuilder.Entity("InterWMSApp.Models.RightsGrid", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
                     b.Property<int>("AccessTypeId")
                         .HasColumnName("accetTypeid")
                         .HasColumnType("integer");
@@ -197,10 +257,31 @@ namespace InterWMSApp.Migrations
                         .HasColumnName("userRole")
                         .HasColumnType("text");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccessTypeId");
+
                     b.HasIndex("UserRole")
                         .IsUnique();
 
                     b.ToTable("rightsgrids","public");
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.StorageArea", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Location")
+                        .HasColumnName("location")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("storageareas","public");
                 });
 
             modelBuilder.Entity("InterWMSApp.Models.User", b =>
@@ -229,6 +310,90 @@ namespace InterWMSApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users","public");
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.Auth", b =>
+                {
+                    b.HasOne("InterWMSApp.Models.User", "User")
+                        .WithOne("Auth")
+                        .HasForeignKey("InterWMSApp.Models.Auth", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.Contract", b =>
+                {
+                    b.HasOne("InterWMSApp.Models.Counterparty", "Counterparty")
+                        .WithMany("Contracts")
+                        .HasForeignKey("CounterpartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.Counterparty", b =>
+                {
+                    b.HasOne("InterWMSApp.Models.User", "User")
+                        .WithOne("Counterparty")
+                        .HasForeignKey("InterWMSApp.Models.Counterparty", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.OperationProduct", b =>
+                {
+                    b.HasOne("InterWMSApp.Models.Contract", "Contract")
+                        .WithMany("OperationProducts")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InterWMSApp.Models.Product", "Product")
+                        .WithMany("OperationProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.Product", b =>
+                {
+                    b.HasOne("InterWMSApp.Models.ProductType", "ProductType")
+                        .WithMany("Products")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.ProductPrice", b =>
+                {
+                    b.HasOne("InterWMSApp.Models.Product", "Product")
+                        .WithMany("ProductPrices")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.ProductStorage", b =>
+                {
+                    b.HasOne("InterWMSApp.Models.Product", "Product")
+                        .WithMany("ProductStorages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InterWMSApp.Models.StorageArea", "StorageArea")
+                        .WithMany("ProductStorages")
+                        .HasForeignKey("StorageAreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InterWMSApp.Models.RightsGrid", b =>
+                {
+                    b.HasOne("InterWMSApp.Models.AccessType", "AccessType")
+                        .WithMany("RightsGrids")
+                        .HasForeignKey("AccessTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

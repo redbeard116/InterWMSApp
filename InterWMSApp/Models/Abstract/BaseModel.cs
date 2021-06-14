@@ -9,16 +9,12 @@ namespace InterWMSApp.Models.Abstract
         [Key, Column("id")]
         public int Id { get; set; }
 
-        public string ToJson(bool ignoreNulls = false)
+        public string ToJson()
         {
             return JsonConvert.SerializeObject(this,
                 new JsonSerializerSettings
                 {
-                    NullValueHandling = ignoreNulls
-                        ? NullValueHandling.Ignore
-                        : NullValueHandling.Include,
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 });
         }
     }

@@ -22,6 +22,9 @@ namespace InterWMSApp.Services.DB
             modelBuilder.Entity<Contract>().Property(w => w.Type).HasConversion<string>();
             modelBuilder.Entity<RightsGrid>().Property(w => w.UserRole).HasConversion<string>();
 
+            modelBuilder.Entity<OperationProduct>().HasKey(w => new { w.ContractId, w.ProductId });
+
+
             modelBuilder.Entity<Auth>().HasIndex(w => w.Login).IsUnique();
             modelBuilder.Entity<RightsGrid>().HasIndex(w => w.UserRole).IsUnique();
 
@@ -32,8 +35,9 @@ namespace InterWMSApp.Services.DB
             modelBuilder.Entity<ProductStorage>().HasOne(w => w.Product).WithMany(w => w.ProductStorages).HasForeignKey(w => w.ProductId);
             modelBuilder.Entity<ProductStorage>().HasOne(w => w.StorageArea).WithMany(w => w.ProductStorages).HasForeignKey(w => w.StorageAreaId);
             modelBuilder.Entity<RightsGrid>().HasOne(w => w.AccessType).WithMany(w => w.RightsGrids).HasForeignKey(w => w.AccessTypeId);
-            modelBuilder.Entity<ProductPrice>().HasOne(w => w.Product).WithMany(w => w.ProductPrices).HasForeignKey(w=>w.ProductId);
-            modelBuilder.Entity<OperationProduct>().HasOne(w => w.Product).WithMany(w => w.OperationProducts).HasForeignKey(w=>w.ProductId);
+            modelBuilder.Entity<ProductPrice>().HasOne(w => w.Product).WithMany(w => w.ProductPrices).HasForeignKey(w => w.ProductId);
+            modelBuilder.Entity<OperationProduct>().HasOne(w => w.Contract).WithMany(w => w.OperationProducts).HasForeignKey(w => w.ContractId);
+            modelBuilder.Entity<OperationProduct>().HasOne(w => w.Product).WithMany(w => w.OperationProducts).HasForeignKey(w => w.ProductId);
         }
 
         #region DbSet
@@ -44,7 +48,7 @@ namespace InterWMSApp.Services.DB
         public DbSet<Counterparty> Counterparties { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
-        public DbSet<RightsGrid> RightsGrids{ get; set; }
+        public DbSet<RightsGrid> RightsGrids { get; set; }
         public DbSet<ProductStorage> ProductStorages { get; set; }
         public DbSet<StorageArea> StorageAreas { get; set; }
         public DbSet<ProductPrice> ProductPrices { get; set; }

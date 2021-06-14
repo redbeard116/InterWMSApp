@@ -23,10 +23,10 @@ namespace InterWMSApp.Models
         public int TypeId { get; set; }
         public ProductType ProductType { get; set; }
         [JsonIgnore]
-        public List<ProductStorage> ProductStorages { get; set; }
+        public ICollection<ProductStorage> ProductStorages { get; set; }
         [JsonIgnore]
-        public List<ProductPrice> ProductPrices { get; set; }
-        [JsonIgnore]
-        public List<OperationProduct> OperationProducts { get; set; }
+        public ICollection<ProductPrice> ProductPrices { get; set; }
+
+        public ICollection<OperationProduct> OperationProducts { get; set; }
     }
 }
