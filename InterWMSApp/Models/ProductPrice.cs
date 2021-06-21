@@ -16,5 +16,13 @@ namespace InterWMSApp.Models
         public double Cost { get; set; }
         [Column("date")]
         public long Date { get; set; }
+        [Column("type")]
+        public PriceType PriceType { get; set; }
+    }
+
+    public enum PriceType
+    {
+        Purchase,
+        Sale
     }
 }

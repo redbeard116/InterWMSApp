@@ -81,16 +81,26 @@ namespace InterWMSApp.Services.ProductPriceService
             }
         }
 
-        public async Task<IEnumerable<ProductPrice>> GetLastPrices()
+        public async Task<IEnumerable<ProductInfo>> GetLastPrices()
         {
             try
             {
                 _logger.LogInformation("Get last product prices");
 
-                var groupPrices = (await _dBContext.ProductPrices.Include(w=>w.Product).ToListAsync()).GroupBy(w=>w.ProductId);
+                var groupPrices = (await _dBContext.ProductPrices.Include(w => w.Product).ToListAsync()).GroupBy(w => w.ProductId);
 
 
-                return groupPrices.Select(w=>w.LastOrDefault());
+                var prices = groupPrices.Select(w => w.LastOrDefault(p => p.PriceType == PriceType.Sale)).Where(w => w != null);
+
+                return from p in prices
+                       join c in _dBContext.NumberProducts on p.ProductId equals c.ProductId
+                       select new ProductInfo
+                       {
+                           ProductId = p.ProductId,
+                           Cost = p.Cost,
+                           Date = p.Date,
+                           Count = c.Count
+                       };
             }
             catch (Exception ex)
             {
@@ -123,7 +133,7 @@ namespace InterWMSApp.Services.ProductPriceService
             try
             {
                 _logger.LogInformation("Get product prices");
-                return _dBContext.ProductPrices.Include(w => w.Product);
+                return _dBContext.ProductPrices.Include(w => w.Product).Where(w => w.PriceType == PriceType.Sale);
             }
             catch (Exception ex)
             {

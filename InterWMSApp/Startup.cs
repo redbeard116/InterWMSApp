@@ -7,7 +7,7 @@ using InterWMSApp.Services.DB;
 using InterWMSApp.Services.DictionaryService;
 using InterWMSApp.Services.ProductPriceService;
 using InterWMSApp.Services.ProductService;
-using InterWMSApp.Services.ProductStorageService;
+using InterWMSApp.Services.ReportsService;
 using InterWMSApp.Services.StorageAreaService;
 using InterWMSApp.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -77,16 +77,16 @@ namespace InterWMSApp
             });
 
             Configuration.GetSection("AppSettings").Bind(_appSettings);
-            services.AddDbContext<DBContext>(ServiceLifetime.Transient);
+            services.AddDbContext<DBContext>(ServiceLifetime.Singleton);
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IDictionaryService, DictionaryService>();
             services.AddSingleton<IContractService, ContractService>();
             services.AddSingleton<ICounterpartyService, CounterpartyService>();
             services.AddSingleton<IProductService, ProductService>();
-            services.AddSingleton<IProductStorageService, ProductStorageService>();
             services.AddSingleton<IStorageAreaService, StorageAreaService>();
             services.AddSingleton<IProductPriceService, ProductPriceService>();
+            services.AddSingleton<IReportsService, ReportsService>();
             services.AddSingleton(_appSettings);
             services.AddSignalR();
             services.AddControllers();

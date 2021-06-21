@@ -14,6 +14,11 @@ namespace InterWMSApp.Models
         [Column("secondname"), Required]
         public string SecondName { get; set; }
 
+        [Column("number"), Required]
+        public string Number { get; set; }
+        [Column("middlename")]
+        public string MiddleName { get; set; }
+
         [Column("role"), Required]
         public UserRole Role { get; set; }
 

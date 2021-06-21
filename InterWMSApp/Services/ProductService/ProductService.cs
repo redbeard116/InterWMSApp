@@ -50,7 +50,7 @@ namespace InterWMSApp.Services.ProductService
             try
             {
                 _logger.LogInformation("GetProducts");
-                return _dBContext.Products;
+                return _dBContext.Products.Include(w => w.ProductType).Include(w => w.StorageArea);
             }
             catch (Exception ex)
             {
@@ -66,6 +66,9 @@ namespace InterWMSApp.Services.ProductService
                 _logger.LogInformation("AddProduct");
                 await _dBContext.Products.AddAsync(product);
                 await _dBContext.SaveChangesAsync();
+
+                await _dBContext.NumberProducts.AddAsync(new NumberProducts { ProductId = product.Id, Count = 0 });
+                await _dBContext.SaveChangesAsync();
                 return product.Id;
             }
             catch (Exception ex)
@@ -80,7 +83,7 @@ namespace InterWMSApp.Services.ProductService
             try
             {
                 _logger.LogInformation($"DeleteProduct {id}");
-                var product = await _dBContext.Products.FirstOrDefaultAsync(w=>w.Id==id);
+                var product = await _dBContext.Products.FirstOrDefaultAsync(w => w.Id == id);
                 _dBContext.Products.Remove(product);
                 await _dBContext.SaveChangesAsync();
                 return true;
@@ -97,7 +100,7 @@ namespace InterWMSApp.Services.ProductService
             try
             {
                 _logger.LogInformation($"EditProduct {product.Id}");
-                var result = _dBContext.Products.FirstOrDefault(w=>w.Id == product.Id);
+                var result = _dBContext.Products.FirstOrDefault(w => w.Id == product.Id);
                 if (result != null)
                 {
                     result.Name = product.Name;

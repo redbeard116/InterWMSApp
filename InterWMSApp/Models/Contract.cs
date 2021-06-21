@@ -31,28 +31,24 @@ namespace InterWMSApp.Models
         [Column("type"), Required]
         public OperationType Type { get; set; }
 
-        [Column("count"), Required]
-        public int Count { get; set; }
-
         public ContractApiM GetContractApiM()
         {
             return new ContractApiM
             {
                 Id = Id,
-                Count = Count,
                 Counterparty = Counterparty,
                 Date = Date,
                 Products = OperationProducts,
                 Sum = Sum,
                 Type = Type
             };
+        }
     }
-}
 
 
-public enum OperationType
-{
-    Reception,
-    Shipping
-}
+    public enum OperationType
+    {
+        Reception,
+        Shipping
+    }
 }

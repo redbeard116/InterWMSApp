@@ -7,6 +7,7 @@ namespace InterWMSApp.Models.Abstract
     public abstract class BaseModel
     {
         [Key, Column("id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public string ToJson()

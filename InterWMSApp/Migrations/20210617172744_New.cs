@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InterWMSApp.Migrations
 {
-    public partial class Fix : Migration
+    public partial class New : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -98,11 +98,19 @@ namespace InterWMSApp.Migrations
                     id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(nullable: false),
-                    typeid = table.Column<int>(nullable: false)
+                    typeid = table.Column<int>(nullable: false),
+                    storageid = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_products", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_products_storageareas_storageid",
+                        column: x => x.storageid,
+                        principalSchema: "public",
+                        principalTable: "storageareas",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_products_producttypes_typeid",
                         column: x => x.typeid,
@@ -159,7 +167,7 @@ namespace InterWMSApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "operationproducts",
+                name: "numberproducts",
                 schema: "public",
                 columns: table => new
                 {
@@ -170,9 +178,9 @@ namespace InterWMSApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_operationproducts", x => x.id);
+                    table.PrimaryKey("PK_numberproducts", x => x.id);
                     table.ForeignKey(
-                        name: "FK_operationproducts_products_productid",
+                        name: "FK_numberproducts_products_productid",
                         column: x => x.productid,
                         principalSchema: "public",
                         principalTable: "products",
@@ -188,7 +196,9 @@ namespace InterWMSApp.Migrations
                     id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     productid = table.Column<int>(nullable: false),
-                    cost = table.Column<double>(nullable: false)
+                    cost = table.Column<double>(nullable: false),
+                    date = table.Column<long>(nullable: false),
+                    type = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -203,35 +213,6 @@ namespace InterWMSApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "productstorage",
-                schema: "public",
-                columns: table => new
-                {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    productid = table.Column<int>(nullable: false),
-                    storageareaid = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_productstorage", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_productstorage_products_productid",
-                        column: x => x.productid,
-                        principalSchema: "public",
-                        principalTable: "products",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_productstorage_storageareas_storageareaid",
-                        column: x => x.storageareaid,
-                        principalSchema: "public",
-                        principalTable: "storageareas",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "contracts",
                 schema: "public",
                 columns: table => new
@@ -241,9 +222,7 @@ namespace InterWMSApp.Migrations
                     counterpartyid = table.Column<int>(nullable: false),
                     date = table.Column<long>(nullable: false),
                     sum = table.Column<double>(nullable: false),
-                    productid = table.Column<int>(nullable: false),
-                    type = table.Column<int>(nullable: false),
-                    count = table.Column<int>(nullable: false)
+                    type = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,8 +234,32 @@ namespace InterWMSApp.Migrations
                         principalTable: "counterpartyes",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "operationproducts",
+                schema: "public",
+                columns: table => new
+                {
+                    productid = table.Column<int>(nullable: false),
+                    contractId = table.Column<int>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    count = table.Column<int>(nullable: false),
+                    sum = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_operationproducts", x => new { x.contractId, x.productid });
                     table.ForeignKey(
-                        name: "FK_contracts_products_productid",
+                        name: "FK_operationproducts_contracts_contractId",
+                        column: x => x.contractId,
+                        principalSchema: "public",
+                        principalTable: "contracts",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_operationproducts_products_productid",
                         column: x => x.productid,
                         principalSchema: "public",
                         principalTable: "products",
@@ -285,16 +288,17 @@ namespace InterWMSApp.Migrations
                 column: "counterpartyid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_contracts_productid",
-                schema: "public",
-                table: "contracts",
-                column: "productid");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_counterpartyes_userid",
                 schema: "public",
                 table: "counterpartyes",
                 column: "userid",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_numberproducts_productid",
+                schema: "public",
+                table: "numberproducts",
+                column: "productid",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -310,22 +314,17 @@ namespace InterWMSApp.Migrations
                 column: "productid");
 
             migrationBuilder.CreateIndex(
+                name: "IX_products_storageid",
+                schema: "public",
+                table: "products",
+                column: "storageid",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_products_typeid",
                 schema: "public",
                 table: "products",
                 column: "typeid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_productstorage_productid",
-                schema: "public",
-                table: "productstorage",
-                column: "productid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_productstorage_storageareaid",
-                schema: "public",
-                table: "productstorage",
-                column: "storageareaid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_rightsgrids_accetTypeid",
@@ -348,7 +347,7 @@ namespace InterWMSApp.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "contracts",
+                name: "numberproducts",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -360,15 +359,11 @@ namespace InterWMSApp.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "productstorage",
-                schema: "public");
-
-            migrationBuilder.DropTable(
                 name: "rightsgrids",
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "counterpartyes",
+                name: "contracts",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -376,19 +371,23 @@ namespace InterWMSApp.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "storageareas",
-                schema: "public");
-
-            migrationBuilder.DropTable(
                 name: "accesstypes",
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "users",
+                name: "counterpartyes",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "storageareas",
                 schema: "public");
 
             migrationBuilder.DropTable(
                 name: "producttypes",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "users",
                 schema: "public");
         }
     }

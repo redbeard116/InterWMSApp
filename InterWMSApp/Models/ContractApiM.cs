@@ -14,14 +14,10 @@ namespace InterWMSApp.Models
 
         public OperationType Type { get; set; }
 
-        public int Count { get; set; }
-
         public Contract GetContract()
         {
             return new Contract
             {
-                Count = Count,
-                Counterparty = Counterparty,
                 CounterpartyId = Counterparty.Id,
                 Date = Date,
                 Sum = Sum,

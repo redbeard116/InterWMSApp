@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InterWMSApp.Models
 {
-    [Table("productstorage", Schema = "public")]
-    public class ProductStorage : BaseModel
+    [Table("numberproducts", Schema = "public")]
+    public class NumberProducts : BaseModel
     {
 
         [Column("productid"), Required]
@@ -13,8 +13,7 @@ namespace InterWMSApp.Models
 
         public Product Product { get; set; }
 
-        [Column("storageareaid"), Required]
-        public int StorageAreaId { get; set; }
-        public StorageArea StorageArea { get; set; }
+        [Column("count"), Required]
+        public int Count { get; set; }
     }
 }

@@ -87,7 +87,7 @@ namespace InterWMSApp.Controllers
             try
             {
                 _logger.LogInformation($"add api/Prices");
-
+                price.PriceType = PriceType.Sale;
                 var result = await _productPriceService.AddProductPrice(price);
                 return Ok(JsonConvert.SerializeObject(result));
             }

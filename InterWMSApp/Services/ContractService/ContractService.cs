@@ -1,5 +1,6 @@
 ﻿using InterWMSApp.Models;
 using InterWMSApp.Services.DB;
+using InterWMSApp.Services.ProductPriceService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,14 +15,17 @@ namespace InterWMSApp.Services.ContractService
         #region Fields
         private readonly ILogger<ContractService> _logger;
         private readonly DBContext _dBContext;
+        private readonly IProductPriceService _productPriceService;
         #endregion
 
         #region Constructor
         public ContractService(ILogger<ContractService> logger,
-                               DBContext dBContext)
+                               DBContext dBContext,
+                               IProductPriceService productPriceService)
         {
             _logger = logger;
             _dBContext = dBContext;
+            _productPriceService = productPriceService;
         }
         #endregion
 
@@ -32,9 +36,28 @@ namespace InterWMSApp.Services.ContractService
             {
                 _logger.LogInformation("Add new contract");
                 var contractDb = contract.GetContract();
+                contractDb.OperationProducts.ToList().ForEach(w => w.Product = null);
                 await _dBContext.Contracts.AddAsync(contractDb);
                 await _dBContext.SaveChangesAsync();
+                if (contractDb.Type == OperationType.Reception)
+                {
+                    var prices = contractDb.OperationProducts.Select(w => new ProductPrice
+                    {
+                        Date = contractDb.Date,
+                        PriceType = PriceType.Purchase,
+                        ProductId = w.ProductId,
+                        Product = w.Product,
+                        Cost = (double)w.Sum / w.Count
+                    });
+
+                    foreach (var price in prices)
+                    {
+                        await _productPriceService.AddProductPrice(price);
+                    }
+
+                }
                 contract.Id = contractDb.Id;
+                await SyncProductCounts(contractDb);
                 return contract;
             }
             catch (Exception ex)
@@ -50,6 +73,7 @@ namespace InterWMSApp.Services.ContractService
             {
                 _logger.LogInformation($"Delete contract {id}");
                 var result = await _dBContext.Contracts.FirstOrDefaultAsync(w => w.Id == id);
+                await SyncProductCountsDelete(result);
                 _dBContext.Contracts.Remove(result);
                 await _dBContext.SaveChangesAsync();
                 return true;
@@ -103,17 +127,72 @@ namespace InterWMSApp.Services.ContractService
             }
         }
 
-        public IEnumerable<ContractApiM> GetContracts()
+        public async Task<IEnumerable<ContractApiM>> GetContracts()
         {
             try
             {
                 _logger.LogInformation("Get contracts");
-                return _dBContext.Contracts.Select(w => w.GetContractApiM());
+                var result = await _dBContext.Contracts.Include(w => w.Counterparty)
+                                           .Include(w => w.Counterparty.User)
+                                           .Include(w => w.OperationProducts)
+                                           .ThenInclude(w => w.Product).ToListAsync();
+
+                return result.Select(w => w.GetContractApiM());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error in {nameof(GetContracts)}");
                 throw;
+            }
+        }
+        #endregion
+
+        #region Private methods
+        private async Task SyncProductCounts(Contract contract)
+        {
+            foreach (var operationProd in contract.OperationProducts)
+            {
+                var numberProduct = await _dBContext.NumberProducts.FirstOrDefaultAsync(w => w.ProductId == operationProd.ProductId);
+
+                if (numberProduct == null)
+                {
+                    continue;
+                }
+
+                if (contract.Type == OperationType.Reception)
+                {
+                    numberProduct.Count += operationProd.Count;
+                }
+                if (contract.Type == OperationType.Shipping)
+                {
+                    numberProduct.Count -= operationProd.Count;
+                }
+
+                await _dBContext.SaveChangesAsync();
+            }
+        }
+
+        private async Task SyncProductCountsDelete(Contract contract)
+        {
+            foreach (var operationProd in contract.OperationProducts)
+            {
+                var numberProduct = await _dBContext.NumberProducts.FirstOrDefaultAsync(w => w.ProductId == operationProd.ProductId);
+
+                if (numberProduct == null)
+                {
+                    continue;
+                }
+
+                if (contract.Type == OperationType.Reception)
+                {
+                    numberProduct.Count -= operationProd.Count;
+                }
+                if (contract.Type == OperationType.Shipping)
+                {
+                    numberProduct.Count += operationProd.Count;
+                }
+
+                await _dBContext.SaveChangesAsync();
             }
         }
         #endregion

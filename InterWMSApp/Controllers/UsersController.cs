@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using InterWMSApp.Extensions;
 
 namespace InterWMSApp.Controllers
 {
@@ -86,11 +87,11 @@ namespace InterWMSApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddUser([FromBody] User user)
+        public async Task<IActionResult> AddUser()
         {
             _logger.LogInformation($"add api/users");
-
-            var iser = User;
+            var body = await this.GetStringFromBody();
+            var user = JsonConvert.DeserializeObject<User>(body);
             int? id = await _userService.AddUser(user);
             if (id.HasValue)
             {
@@ -114,12 +115,13 @@ namespace InterWMSApp.Controllers
             return BadRequest("Ошибка при удалении задания");
         }
 
-        [HttpPut("edit")]
+        [HttpPut("edit/{id}")]
         [Authorize]
-        public async Task<IActionResult> EditUser([FromBody] User user)
+        public async Task<IActionResult> EditUser(int id)
         {
-            _logger.LogInformation($"patch api/users/edit/{user.Id}");
-
+            _logger.LogInformation($"patch api/users/edit/{id}");
+            var body = await this.GetStringFromBody();
+            var user = JsonConvert.DeserializeObject<User>(body);
             var result = await _userService.EditUser(user);
             if (result != null)
             {

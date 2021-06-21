@@ -21,6 +21,9 @@ namespace InterWMSApp.Services.DB
             modelBuilder.Entity<User>().Property(w => w.Role).HasConversion<string>();
             modelBuilder.Entity<Contract>().Property(w => w.Type).HasConversion<string>();
             modelBuilder.Entity<RightsGrid>().Property(w => w.UserRole).HasConversion<string>();
+            modelBuilder.Entity<ProductPrice>().Property(w => w.PriceType).HasConversion<string>();
+
+            modelBuilder.Entity<Product>().Property(p => p.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<OperationProduct>().HasKey(w => new { w.ContractId, w.ProductId });
 
@@ -32,12 +35,12 @@ namespace InterWMSApp.Services.DB
             modelBuilder.Entity<Product>().HasOne(p => p.ProductType).WithMany(t => t.Products).HasForeignKey(p => p.TypeId);
             modelBuilder.Entity<Contract>().HasOne(w => w.Counterparty).WithMany(w => w.Contracts).HasForeignKey(w => w.CounterpartyId);
             modelBuilder.Entity<Counterparty>().HasOne(w => w.User).WithOne(w => w.Counterparty);
-            modelBuilder.Entity<ProductStorage>().HasOne(w => w.Product).WithMany(w => w.ProductStorages).HasForeignKey(w => w.ProductId);
-            modelBuilder.Entity<ProductStorage>().HasOne(w => w.StorageArea).WithMany(w => w.ProductStorages).HasForeignKey(w => w.StorageAreaId);
+            modelBuilder.Entity<Product>().HasOne(w => w.StorageArea).WithMany(w => w.Products).HasForeignKey(w=>w.StorageAreaId);
             modelBuilder.Entity<RightsGrid>().HasOne(w => w.AccessType).WithMany(w => w.RightsGrids).HasForeignKey(w => w.AccessTypeId);
             modelBuilder.Entity<ProductPrice>().HasOne(w => w.Product).WithMany(w => w.ProductPrices).HasForeignKey(w => w.ProductId);
             modelBuilder.Entity<OperationProduct>().HasOne(w => w.Contract).WithMany(w => w.OperationProducts).HasForeignKey(w => w.ContractId);
             modelBuilder.Entity<OperationProduct>().HasOne(w => w.Product).WithMany(w => w.OperationProducts).HasForeignKey(w => w.ProductId);
+            modelBuilder.Entity<NumberProducts>().HasOne(w => w.Product).WithOne(w => w.NumberProduct);
         }
 
         #region DbSet
@@ -49,10 +52,10 @@ namespace InterWMSApp.Services.DB
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<RightsGrid> RightsGrids { get; set; }
-        public DbSet<ProductStorage> ProductStorages { get; set; }
         public DbSet<StorageArea> StorageAreas { get; set; }
         public DbSet<ProductPrice> ProductPrices { get; set; }
-        //public DbSet<OperationProduct> OperationProducts { get; set; }
+        public DbSet<OperationProduct> OperationProducts { get; set; }
+        public DbSet<NumberProducts> NumberProducts { get; set; }
         #endregion
     }
 }

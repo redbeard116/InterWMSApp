@@ -36,7 +36,7 @@ namespace InterWMSApp.Controllers
             {
                 _logger.LogInformation("get api/Contracts");
 
-                var contracts = _contractService.GetContracts();
+                var contracts = await _contractService.GetContracts();
 
                 return Ok(JsonConvert.SerializeObject(contracts));
             }

@@ -10,12 +10,12 @@ namespace InterWMSApp.Models
     {
         public StorageArea()
         {
-            ProductStorages = new List<ProductStorage>();
+            Products = new List<Product>();
         }
 
         [Column("location")]
         public string Location { get; set; }
         [JsonIgnore]
-        public List<ProductStorage> ProductStorages { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

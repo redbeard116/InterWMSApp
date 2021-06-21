@@ -11,7 +11,6 @@ namespace InterWMSApp.Models
     {
         public Product()
         {
-            ProductStorages = new List<ProductStorage>();
             ProductPrices = new List<ProductPrice>();
             OperationProducts = new List<OperationProduct>();
         }
@@ -22,11 +21,14 @@ namespace InterWMSApp.Models
         [Column("typeid"), Required]
         public int TypeId { get; set; }
         public ProductType ProductType { get; set; }
-        [JsonIgnore]
-        public ICollection<ProductStorage> ProductStorages { get; set; }
+        [Column("storageid"), Required]
+        public int StorageAreaId { get; set; }
+        public StorageArea StorageArea { get; set; }
         [JsonIgnore]
         public ICollection<ProductPrice> ProductPrices { get; set; }
-
+        [JsonIgnore]
+        public NumberProducts NumberProduct { get; set; }
+        [JsonIgnore]
         public ICollection<OperationProduct> OperationProducts { get; set; }
     }
 }
