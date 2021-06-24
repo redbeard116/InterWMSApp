@@ -89,6 +89,7 @@ namespace InterWMSApp
             services.AddSingleton<IReportsService, ReportsService>();
             services.AddSingleton(_appSettings);
             services.AddSignalR();
+            services.AddSwaggerGen();
             services.AddControllers();
         }
 
@@ -106,6 +107,11 @@ namespace InterWMSApp
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseEndpoints(endpoints =>
             {
